@@ -1,4 +1,5 @@
 const users = [];
+const rooms = [];
 
 // addUser, removeUser, getUser, getUsersInRoom
 
@@ -10,7 +11,7 @@ const addUser = ({ id, username, room }) => {
     // validate the data
     if (!username || !room) {
         return {
-            error: 'Useername and room are required!'
+            error: 'Username and room are required!'
         }
     }
 
@@ -27,8 +28,30 @@ const addUser = ({ id, username, room }) => {
     }
 
     // store user
-    const user = { id, username, room }
+    const user = { id, username, room };
     users.push(user);
+
+    //store rooms
+    // check if room is already exists
+    // console.log('before: ', rooms);
+    let roomExists = false;
+    if(rooms.length > 0) {
+        rooms.forEach((object) => {
+            if(object.room === room){
+                roomExists = true;
+            }
+        });
+    }
+    if(roomExists === false){
+        rooms.push({ room });
+    }
+
+    // console.log(rooms.length);
+    // const roomAdd = { room };
+    
+    // console.log('Active rooms: ', getActiveRooms());
+    // console.log('Update rooms: ', deleteInactiveRooms());
+
     return { user };
 }
 
@@ -55,9 +78,55 @@ const getUsersInRoom = (room) => {
     return users.filter((user) => user.room === room );
 }
 
+// add active rooms
+const getActiveRooms = (err, res) => {
+    if(err){
+        return err;
+    }
+    else{
+        return { rooms };
+    }
+}
+
+// remove inactive rooms
+const deleteInactiveRooms = (err, res) => {
+    // to be done
+    // should remove room when no user in the room
+    if(err){
+        return err;
+    }
+    else{
+        // console.log('users: ', users);
+        // console.log('rooms', rooms);
+
+        rooms.forEach((object) => {
+            let userCount = 0;
+            let currentRoom = object.room;
+
+            users.forEach((user) => {
+                if(user.room === currentRoom){
+                    userCount ++;
+                }
+            });
+
+            // console.log(currentRoom, userCount);
+
+            if(userCount === 0){
+                // console.log('room deleted', currentRoom);
+                rooms.splice(currentRoom);
+            }
+
+        });
+
+        return { rooms };
+    }
+}
+
 module.exports = {
     addUser,
     removeUser,
     getUser,
-    getUsersInRoom
+    getUsersInRoom,
+    getActiveRooms,
+    deleteInactiveRooms
 }

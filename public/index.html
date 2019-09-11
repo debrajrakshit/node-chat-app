@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Chat App</title>
     <link rel="icon" href="./img/favicon.png">
-    <link rel="stylesheet" href="./css/styles.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 
 <body>
@@ -17,13 +17,29 @@
             <form action="/chat.html">
                 <label for="">Display Name</label>
                 <input type="text" name="username" id="" placeholder="Display Name" required>
-                <label for="">Room</label>
-                <input type="text" name="room" placeholder="Room" required>
+                <label for="">Create/Join Room</label>
+                <input type="text" id="room-input" name="room" placeholder="Enter Room Name" required>
+                
+                <!-- <div id="rooms-select"></div> -->
+                <label for="">Join Active Rooms</label>
+                <select name="rooms" id="rooms-select"></select>
+
                 <button>Join</button>
             </form>
         </div>
     </div>
 
+    <script id="room-select-template" type="text/html">
+        {{#rooms}}
+            <option value="{{room}}" >{{room}}</option>
+        {{/rooms}}
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/rooms.js"></script>
 </body>
 
 </html>

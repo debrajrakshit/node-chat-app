@@ -8,7 +8,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 const { generateMessage, generateLocationMessage } = require('./utils/messages');
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users');
+const { addUser, removeUser, getUser, getUsersInRoom, getActiveRooms, deleteInactiveRooms } = require('./utils/users');
+
 
 const publicDirectoryPath = path.join(__dirname, '../public');
 
@@ -33,7 +34,7 @@ io.on('connection', (socket) => {
             room: user.room,
             users: getUsersInRoom(user.room)
         });
-
+    
         callback();
     });
 
@@ -67,7 +68,19 @@ io.on('connection', (socket) => {
                 users: getUsersInRoom(user.room)
             });
         }
+
     });
+
+    // const rooms = [{room: 'room1'},{room: 'room2'}];
+    const { rooms } = getActiveRooms();
+    // const { rooms } = deleteInactiveRooms();
+    socket.emit('roomList', {
+        rooms
+    });
+
+    
+
+
 });
 
 module.exports = server;

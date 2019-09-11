@@ -67,6 +67,8 @@ socket.on('roomData', ({ room, users }) => {
         users
     });
 
+    console.log(users);
+
     document.querySelector('#sidebar').innerHTML = html;
 });
 
@@ -95,7 +97,7 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
 
 document.querySelector('#send-location').addEventListener('click', () => {
     if(!navigator.geolocation){
-        return alert('Feolocation is not supported by your browser');
+        return alert('Geolocation is not supported by your browser');
     }
 
     $sendLocationButton.setAttribute('disabled', 'disabled');
@@ -115,9 +117,14 @@ document.querySelector('#send-location').addEventListener('click', () => {
 
 });
 
+
+//The server uses an acknowledgement to send errors back to the client. The client can set
+// up the callback function and respond to any errors that might occur. If an error does occur,
+// the snippet below shows the error message and then redirects the user back to the join
+// page.
 socket.emit('join', { 
     username: username, 
-    room: room 
+    room: room
 }, (error) => {
     if(error) {
         alert(error);
